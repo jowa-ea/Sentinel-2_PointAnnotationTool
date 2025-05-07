@@ -11,5 +11,6 @@ To the left, by default, the NDVI time series of the point to be annotated is sh
 
 **Layer control**: 
 - In the rigth panel, the annotator can choose to uncheck all layers, check all layers and change vizualisation parameters from False colors to True colors and back.
+**Point navigation**
 - The annotator can also navigate in points to be annotated using previous point, next point and go to point buttons.
 
