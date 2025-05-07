@@ -11,20 +11,19 @@ Last modified 07-05-2025
 ////////////////// PROJECT SETUP ////////////////// 
 
 //// Setting up NDVI time series visualization
-var NDVI_sd = ee.Date('2024-08-15'); // Start date for NDVI time series plot
-var NDVI_ed = ee.Date('2025-05-15'); // End date for NDVI time series plot
+var NDVI_sd = ee.Date('2024-08-15'); // INPUT ->  Start date for NDVI time series plot
+var NDVI_ed = ee.Date('2025-05-15'); // INPUT ->  End date for NDVI time series plot
 
 //// Setting up samples
-// A feature collection of samples to be annotated, including a column "shuffled_i" as index
-var samples = ee.FeatureCollection('GEE asset path to your samples to be annotated'); 
-var zoomLevel = 14; // Map initial zoom level
+var samples = ee.FeatureCollection('GEE asset path to your samples to be annotated'); // INPUT ->  Link to feature collection
+var zoomLevel = 14; // INPUT ->  Map initial zoom level
 
 
 //// Setting up default background map
-Map.setOptions('HYBRID');
+Map.setOptions('HYBRID'); // INPUT ->  Background map type
 
 //// Setting up imagery parameters
-var bounds = ee.FeatureCollection("FAO/GAUL/2015/level0").filter(ee.Filter.eq('ADM0_CODE',254)); // AOI shape, here Ukraine
+var bounds = ee.FeatureCollection("FAO/GAUL/2015/level0").filter(ee.Filter.eq('ADM0_CODE',254)); // INPUT ->  AOI shape, here Ukraine
 var vizTC = {min:0, max:3000, bands:['B4','B3','B2']};
 var vizFC = {min:0, max:3000, bands:['B8','B4','B3']};
 var currentViz = true;
@@ -77,7 +76,7 @@ var addS2imagery = function(currentViz){
   if (currentViz === true){
     // Compositing periods and default visibility
     var dateRanges = [
-    ['2024-09-01','2024-09-15',vizFC, false], //[startDate, endDate, Bool: visible or not]
+    ['2024-09-01','2024-09-15',vizFC, false], // INPUT ->  [startDate, endDate, Bool: visible or not]
     ['2024-09-15','2024-09-30',vizFC, true],
     ['2024-09-30','2024-10-15',vizFC, false],
     ['2024-10-15','2024-10-31',vizFC, false],
@@ -98,18 +97,17 @@ var addS2imagery = function(currentViz){
   
     dateRanges.forEach(function(range, i) {
       i = s2c(range[0], range[1], bounds);
-      Map.addLayer(i, range[2], range[0]+"_"+range[1], range[3]); // show spring
+      Map.addLayer(i, range[2], range[0]+"_"+range[1], range[3]); 
     });
 
     
-    // Add CTM
-    Map.addLayer(wc25.updateMask(wc25.gt(0)), wc_style, 'winter crops 25');
+
     
   }else{
     
     // Compositing periods and default visibility
     var dateRanges = [
-    ['2024-09-01','2024-09-15',vizTC, false], //[startDate, endDate, Bool: visible or not]
+    ['2024-09-01','2024-09-15',vizTC, false], // INPUT ->  [startDate, endDate, Bool: visible or not]
     ['2024-09-15','2024-09-30',vizTC, true],
     ['2024-09-30','2024-10-15',vizTC, false],
     ['2024-10-15','2024-10-31',vizTC, false],
@@ -133,15 +131,8 @@ var addS2imagery = function(currentViz){
       Map.addLayer(i, range[2], range[0]+"_"+range[1], range[3]); // show spring
     });
 
-    // Add CTM
-    Map.addLayer(wc25.updateMask(wc25.gt(0)), wc_style, 'winter crops 25');
   }
 };
-
-
-
-
-
 
 ////////////////// Annotation App setup ////////////////// 
 // Create a panel to hold the navigation UI elements.
@@ -271,7 +262,7 @@ navPanel.add(nextButton);
 var miniMap = ui.Map();
   miniMap.setOptions('ROADMAP');
   miniMap.setControlVisibility(false);
-  miniMap.setCenter(31, 48, 4); // Centered on Ukraine
+  miniMap.setCenter(31, 48, 4); // INPUT -> Centered on Ukraine
   miniMap.addLayer(samples.filter(ee.Filter.eq('shuffled_i', featNo)).first().geometry(), {color:'red'},'point');
 
 // Embed minimap in a panel
@@ -387,9 +378,3 @@ function runScript() {
 
 // Initially run the process
 runScript();
-
-
-
-
-
-
